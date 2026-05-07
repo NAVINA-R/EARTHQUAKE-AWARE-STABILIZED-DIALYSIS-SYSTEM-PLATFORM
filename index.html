@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>ESDS Platform | Emergency Smart Dispatch System</title>
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f7fc;
+      color: #1e2a3e;
+      line-height: 1.5;
+    }
+
+    /* Utilities */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 28px;
+      font-weight: 600;
+      border-radius: 40px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1rem;
+      border: none;
+      background: transparent;
+    }
+
+    .btn-primary {
+      background: #dc2626;
+      color: white;
+      box-shadow: 0 4px 8px rgba(220,38,38,0.2);
+    }
+    .btn-primary:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+    }
+
+    .btn-outline {
+      border: 2px solid #dc2626;
+      color: #dc2626;
+      background: white;
+    }
+    .btn-outline:hover {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-login {
+      background: white;
+      color: #1e2a3e;
+      border: 1px solid #cbd5e1;
+    }
+    .btn-login:hover {
+      border-color: #dc2626;
+      color: #dc2626;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: white;
+      box-shadow: 0 1px 12px rgba(0,0,0,0.03);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(2px);
+    }
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 24px;
+      flex-wrap: wrap;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.7rem;
+      font-weight: 800;
+      color: #0f3b5c;
+    }
+    .logo i {
+      color: #dc2626;
+      font-size: 2rem;
+    }
+    .nav-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+    @media (max-width: 720px) {
+      .nav-container { flex-direction: column; gap: 14px; }
+      .nav-links { flex-wrap: wrap; justify-content: center; }
+      .hero h1 { font-size: 2rem; }
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, #eef2f9 0%, #ffffff 100%);
+      padding: 60px 0 70px;
+    }
+    .hero-grid {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 40px;
+    }
+    .hero-content {
+      flex: 1;
+    }
+    .hero-content h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 20px;
+      background: linear-gradient(120deg, #b91c1c, #1e3a5f);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .hero-badge {
+      background: #fee2e2;
+      color: #b91c1c;
+      border-radius: 60px;
+      padding: 6px 16px;
+      font-weight: 600;
+      display: inline-block;
+      margin-bottom: 20px;
+      font-size: 0.85rem;
+    }
+    .hero-buttons {
+      display: flex;
+      gap: 16px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+    .emergency-banner {
+      background: #ffedd5;
+      border-left: 6px solid #dc2626;
+      padding: 14px 24px;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin: 30px 0 20px;
+    }
+    .emergency-text i {
+      font-size: 1.5rem;
+      color: #dc2626;
+      margin-right: 12px;
+    }
+
+    /* Features Grid */
+    .section-title {
+      text-align: center;
+      font-size: 2rem;
+      margin: 50px 0 30px;
+      font-weight: 700;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px,1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+    .feature-card {
+      background: white;
+      padding: 28px 20px;
+      border-radius: 28px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+      transition: 0.2s;
+      text-align: center;
+      border: 1px solid #e9eef3;
+    }
+    .feature-card i {
+      font-size: 2.8rem;
+      color: #dc2626;
+      margin-bottom: 20px;
+    }
+    /* Stats */
+    .stats {
+      background: #0f3b5c;
+      color: white;
+      padding: 55px 0;
+      border-radius: 40px;
+      margin: 60px 0;
+    }
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 60px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+    }
+
+    /* ===== MAP SECTION STYLES ===== */
+    .map-section {
+      background: white;
+      border-radius: 32px;
+      padding: 30px;
+      margin: 50px 0;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+    }
+    .map-header {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+    .map-header h2 {
+      font-size: 1.8rem;
+      color: #1e3a5f;
+    }
+    .map-header p {
+      color: #64748b;
+    }
+    .map-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 24px;
+    }
+    #nearbyMap {
+      height: 450px;
+      border-radius: 20px;
+      z-index: 1;
+    }
+    .nearby-list {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 16px;
+      max-height: 450px;
+      overflow-y: auto;
+    }
+    .nearby-list h4 {
+      color: #1e3a5f;
+      margin-bottom: 12px;
+    }
+    .healthcare-item {
+      background: white;
+      padding: 12px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+      border-left: 3px solid #dc2626;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .healthcare-item:hover {
+      transform: translateX(3px);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .healthcare-name {
+      font-weight: 700;
+      color: #0f172a;
+    }
+    .healthcare-distance {
+      font-size: 0.7rem;
+      color: #059669;
+      margin-top: 5px;
+    }
+    .locate-btn {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 40px;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 15px;
+      font-weight: 600;
+    }
+    .radius-select {
+      margin: 12px 0;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .radius-select select {
+      padding: 6px 12px;
+      border-radius: 30px;
+      border: 1px solid #cbd5e1;
+    }
+    @media (max-width: 900px) {
+      .map-grid {
+        grid-template-columns: 1fr;
+      }
+      #nearbyMap {
+        height: 350px;
+      }
+    }
+
+    footer {
+      text-align: center;
+      padding: 40px 0 30px;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 50px;
+      color: #4a5568;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar (Component-like) -->
+  <div class="navbar">
+    <div class="container nav-container">
+      <div class="logo">
+        <i class="fas fa-ambulance"></i>
+        <span>ESDS<span style="color:#dc2626;">+</span></span>
+      </div>
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#">Emergency</a>
+        <a href="#">Hospitals</a>
+        <a href="#">Contact</a>
+        <a href="login.html" class="btn btn-login"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="register.html" class="btn btn-primary"><i class="fas fa-user-plus"></i> Register</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-content">
+        <span class="hero-badge"><i class="fas fa-clock"></i> 24/7 Emergency Response</span>
+        <h1>Smart Dispatch. <br> Faster Care.</h1>
+        <p style="font-size: 1.2rem; color:#2d3e50;">Integrated Emergency Smart Dispatch System for real-time triage, hospital coordination & life-saving alerts.</p>
+        <div class="hero-buttons">
+          <a href="register.html" class="btn btn-primary"><i class="fas fa-shield-alt"></i> Get Started</a>
+          <a href="emergency.html" class="btn btn-outline"><i class="fas fa-phone-alt"></i> Emergency 108</a>
+        </div>
+      </div>
+      <div style="flex:1; text-align:center;">
+        <i class="fas fa-hospital-user" style="font-size: 12rem; color:#cbd5e180;"></i>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <!-- Emergency Alert Banner (live indicator) -->
+    <div class="emergency-banner" id="liveEmergencyAlert">
+      <div class="emergency-text">
+        <i class="fas fa-circle" style="color:#dc2626; font-size: 12px;"></i> 
+        <strong>STATUS: </strong> All emergency services active | Nearby hospitals: 12 available beds
+      </div>
+      <a href="emergency.html" style="background:#dc2626; color:white; padding:8px 20px; border-radius:40px; text-decoration:none; font-size:0.9rem;">🚨 Report Emergency</a>
+    </div>
+
+    <!-- Features Section -->
+    <h2 class="section-title">Why ESDS Platform?</h2>
+    <div class="features-grid">
+      <div class="feature-card"><i class="fas fa-map-marker-alt"></i><h3>Live Tracking</h3><p>GPS-enabled ambulance & responder tracking.</p></div>
+      <div class="feature-card"><i class="fas fa-chart-line"></i><h3>AI Triage</h3><p>Priority scoring based on symptoms & vitals.</p></div>
+      <div class="feature-card"><i class="fas fa-building"></i><h3>Center Dashboard</h3><p>Real-time bed & resource management.</p></div>
+      <div class="feature-card"><i class="fas fa-users"></i><h3>Multi-role Access</h3><p>Doctor, nurse, admin, council dedicated views.</p></div>
+    </div>
+  </div>
+
+  <!-- Statistics Section -->
+  <div class="container stats">
+    <div class="stats-grid">
+      <div><div class="stat-number">500+</div><div>Emergencies Handled</div></div>
+      <div><div class="stat-number">98%</div><div>Response Rate</div></div>
+      <div><div class="stat-number">32</div><div>Partner Centers</div></div>
+      <div><div class="stat-number">< 6min</div><div>Avg Arrival</div></div>
+    </div>
+  </div>
+
+  <!-- ===== NEW: MAP & NEARBY HEALTHCARE SECTION ===== -->
+  <div class="container">
+    <div class="map-section">
+      <div class="map-header">
+        <h2><i class="fas fa-map-marked-alt"></i> Find Nearby Healthcare</h2>
+        <p>Locate nearest hospitals, dialysis centers, and emergency services</p>
+      </div>
+      <div class="map-grid">
+        <div id="nearbyMap"></div>
+        <div class="nearby-list">
+          <h4><i class="fas fa-hospital-user"></i> Nearby Centers</h4>
+          <div class="radius-select">
+            <i class="fas fa-chart-line"></i>
+            <label>Radius: </label>
+            <select id="radiusSelect">
+              <option value="2">2 km</option>
+              <option value="5" selected>5 km</option>
+              <option value="10">10 km</option>
+              <option value="15">15 km</option>
+              <option value="20">20 km</option>
+              <option value="30">30 km</option>
+            </select>
+            <button id="refreshMapBtn" style="background:#3b82f6; color:white; border:none; padding:5px 12px; border-radius:30px; cursor:pointer;">⟳</button>
+          </div>
+          <div id="nearbyCentersList">
+            <div style="text-align:center; padding:20px; color:#6b7280;">
+              <i class="fas fa-spinner fa-pulse"></i> Click "Get My Location"
+            </div>
+          </div>
+          <button id="getLocationMapBtn" class="locate-btn">
+            <i class="fas fa-crosshairs"></i> Get My Live Location
+          </button>
+          <p style="font-size:0.7rem; text-align:center; margin-top:12px; color:#6b7280;">
+            <i class="fas fa-shield-alt"></i> Your location is private
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Testimonials Section -->
+  <div class="container">
+    <div style="display:flex; gap:30px; flex-wrap:wrap; margin: 40px 0;">
+      <div style="flex:1; background:#fff; padding:28px; border-radius:32px; box-shadow:0 5px 12px rgba(0,0,0,0.05);">
+        <i class="fas fa-quote-left" style="color:#dc2626; font-size:2rem;"></i>
+        <p style="margin:20px 0; font-style:italic;">"ESDS reduced our dispatch time by 40%. Critical patients get immediate attention."</p>
+        <strong>— City Trauma Center</strong>
+      </div>
+      <div style="flex:1; background:#fff; padding:28px; border-radius:32px;">
+        <i class="fas fa-quote-left" style="color:#dc2626; font-size:2rem;"></i>
+        <p style="margin:20px 0; font-style:italic;">"As a nurse, real-time triage dashboard helps prioritize effectively."</p>
+        <strong>— Sarah, RN</strong>
+      </div>
+    </div>
+    <div style="text-align:center; margin: 10px 0 40px;">
+      <a href="register.html" class="btn btn-primary" style="padding:14px 40px;"><i class="fas fa-heartbeat"></i> Join ESDS Network</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>© 2026 ESDS Platform — EARTHQUAKE STABILIZED DIALYSIS SYSTEM | Healthcare Beyond Boundaries</p>
+      <p style="margin-top:10px;"><i class="fas fa-phone"></i> 108 | <i class="fas fa-envelope"></i> support@esds-health.org</p>
+    </div>
+  </footer>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    // ========== HEALTHCARE DATABASE ==========
+   const healthcareCenters = [
+  { name: "Apollo Hospitals Chennai", type: "Multi-specialty", lat: 13.0359, lng: 80.2348, address: "Greams Road, Chennai - 600006", phone: "044 2829 0200" },
+  { name: "ESDS Dialysis Center - T Nagar", type: "Dialysis Unit", lat: 13.0435, lng: 80.2345, address: "T Nagar, Chennai - 600017", phone: "044 2435 6789" },
+  { name: "Fortis Malar Hospital", type: "Hospital", lat: 13.0518, lng: 80.2477, address: "Adyar, Chennai - 600020", phone: "044 4933 4933" },
+  { name: "Global Hospitals Chennai", type: "Multi-specialty", lat: 13.0341, lng: 80.2142, address: "Perumbakkam, Chennai - 600100", phone: "044 4477 7700" },
+  { name: "MIOT International Hospital", type: "Tertiary Care", lat: 13.0146, lng: 80.2244, address: "Manapakkam, Chennai - 600089", phone: "044 4200 2288" },
+  { name: "Sri Ramachandra Medical Centre", type: "Hospital", lat: 13.0605, lng: 80.1463, address: "Porur, Chennai - 600116", phone: "044 2476 8403" },
+  { name: "Dialysis Clinic - Anna Nagar", type: "Dialysis Center", lat: 13.0856, lng: 80.2128, address: "Anna Nagar, Chennai - 600040", phone: "044 2626 1144" },
+  { name: "Kidney Care Centre - Velachery", type: "Nephrology Center", lat: 12.9772, lng: 80.2206, address: "Velachery, Chennai - 600042", phone: "044 2244 3344" },
+  { name: "Sundaram Medical Foundation", type: "Clinic", lat: 13.1236, lng: 80.2078, address: "Shanthi Colony, Chennai - 600040", phone: "044 4226 2600" },
+  { name: "Chennai Dialysis & Research Centre", type: "Dialysis Unit", lat: 13.0649, lng: 80.2490, address: "Nungambakkam, Chennai - 600034", phone: "044 2828 2828" },
+        { name: "City Central Hospital", type: "Multi-specialty", lat: 19.0760, lng: 72.8777, address: "MG Road, Fort, Mumbai", phone: "022 1234 5678" },
+      { name: "ESDS Dialysis Center", type: "Dialysis Unit", lat: 19.1197, lng: 72.8469, address: "Andheri West, Mumbai", phone: "022 2345 6789" },
+      { name: "Apollo Clinic Bandra", type: "Clinic", lat: 19.0596, lng: 72.8295, address: "Bandra West, Mumbai", phone: "022 3456 7890" },
+      { name: "Lilavati Hospital", type: "Tertiary Care", lat: 19.0345, lng: 72.8255, address: "Bandra Reclamation, Mumbai", phone: "022 4567 8901" },
+      { name: "KEM Hospital", type: "Government Hospital", lat: 18.9955, lng: 72.8677, address: "Parel, Mumbai", phone: "022 5678 9012" },
+      { name: "Northside Dialysis Clinic", type: "Dialysis Center", lat: 19.1500, lng: 72.8300, address: "Goregaon East, Mumbai", phone: "022 6789 0123" },
+      { name: "Global Kidney Care", type: "Nephrology Center", lat: 19.0895, lng: 72.8655, address: "Dadar West, Mumbai", phone: "022 7890 1234" },
+      { name: "Fortis Hospital Mulund", type: "Hospital", lat: 19.1720, lng: 72.9560, address: "Mulund West, Mumbai", phone: "022 8901 2345" }
+];
+
+    let map;
+    let userMarker = null;
+    let circleLayer = null;
+    let healthcareMarkers = [];
+    let currentLat = null;
+    let currentLng = null;
+
+    function deg2rad(deg) { return deg * (Math.PI / 180); }
+    
+    function getDistance(lat1, lng1, lat2, lng2) {
+      const R = 6371;
+      const dLat = deg2rad(lat2 - lat1);
+      const dLng = deg2rad(lng2 - lng1);
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      return R * c;
+    }
+
+    function getNearbyCenters(lat, lng, radiusKm) {
+      return healthcareCenters.map(center => ({
+        ...center,
+        distance: getDistance(lat, lng, center.lat, center.lng)
+      })).filter(c => c.distance <= radiusKm).sort((a,b) => a.distance - b.distance);
+    }
+
+    function updateNearbyList(lat, lng, radius) {
+      const nearby = getNearbyCenters(lat, lng, radius);
+      const container = document.getElementById('nearbyCentersList');
+      if(nearby.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:20px;">No centers within ${radius} km</div>`;
+        return;
+      }
+      container.innerHTML = nearby.map(c => `
+        <div class="healthcare-item" onclick="zoomToCenter(${c.lat}, ${c.lng})">
+          <div class="healthcare-name"><i class="fas fa-hospital"></i> ${c.name}</div>
+          <div class="healthcare-distance">📏 ${c.distance.toFixed(1)} km away</div>
+        </div>
+      `).join('');
+    }
+
+    function updateHealthcareMarkers(lat, lng, radius) {
+      healthcareMarkers.forEach(m => map.removeLayer(m));
+      healthcareMarkers = [];
+      const nearby = getNearbyCenters(lat, lng, radius);
+      const icon = L.divIcon({
+        html: '<i class="fas fa-hospital" style="color:#dc2626; font-size:22px;"></i>',
+        iconSize: [24, 24],
+        className: 'custom-icon'
+      });
+      nearby.forEach(center => {
+        const marker = L.marker([center.lat, center.lng], { icon })
+          .bindPopup(`<b>${center.name}</b><br>${center.address}<br>📞 ${center.phone}`)
+          .addTo(map);
+        healthcareMarkers.push(marker);
+      });
+    }
+
+    function updateUserLocation(lat, lng, radius) {
+      if(userMarker) map.removeLayer(userMarker);
+      if(circleLayer) map.removeLayer(circleLayer);
+      const userIcon = L.divIcon({
+        html: '<i class="fas fa-user-circle" style="color:#2563eb; font-size:32px;"></i>',
+        iconSize: [32, 32],
+        className: 'custom-icon'
+      });
+      userMarker = L.marker([lat, lng], { icon: userIcon }).bindPopup('You are here').addTo(map);
+      circleLayer = L.circle([lat, lng], { radius: radius * 1000, color: '#3b82f6', weight: 2, fillOpacity: 0.1 }).addTo(map);
+      map.setView([lat, lng], 13);
+      updateNearbyList(lat, lng, radius);
+      updateHealthcareMarkers(lat, lng, radius);
+    }
+
+    window.zoomToCenter = (lat, lng) => {
+      map.setView([lat, lng], 16);
+      L.circle([lat, lng], { radius: 100, color: '#ef4444', weight: 2 }).addTo(map);
+    };
+
+    function getLocation() {
+      if(navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (pos) => {
+            currentLat = pos.coords.latitude;
+            currentLng = pos.coords.longitude;
+            const radius = parseInt(document.getElementById('radiusSelect').value);
+            updateUserLocation(currentLat, currentLng, radius);
+          },
+          (err) => {
+            alert("Location access denied. Using demo location (Mumbai).");
+            currentLat = 19.0760;
+            currentLng = 72.8777;
+            updateUserLocation(currentLat, currentLng, 5);
+          }
+        );
+      } else {
+        alert("Geolocation not supported");
+      }
+    }
+
+    function refreshMap() {
+      if(currentLat && currentLng) {
+        const radius = parseInt(document.getElementById('radiusSelect').value);
+        updateUserLocation(currentLat, currentLng, radius);
+      } else {
+        getLocation();
+      }
+    }
+
+    // Initialize Map
+    map = L.map('nearbyMap').setView([19.0760, 72.8777], 12);
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
+    }).addTo(map);
+
+    document.getElementById('getLocationMapBtn').addEventListener('click', getLocation);
+    document.getElementById('refreshMapBtn').addEventListener('click', refreshMap);
+    document.getElementById('radiusSelect').addEventListener('change', refreshMap);
+
+    // existing banner script
+    const banner = document.getElementById('liveEmergencyAlert');
+    if(banner) {
+      setInterval(() => {
+        const statusDiv = banner.querySelector('.emergency-text');
+        if(statusDiv) {
+          const rand = Math.floor(Math.random() * 3);
+          if(rand === 0) statusDiv.innerHTML = `<i class="fas fa-circle" style="color:#dc2626; font-size: 12px;"></i> <strong>STATUS: </strong> 🟢 Active paramedics: 18 | Response ready`;
+          else if(rand === 1) statusDiv.innerHTML = `<i class="fas fa-circle" style="color:#dc2626;"></i> <strong>STATUS: </strong> Latest alert: Accident on NH-48, ambulance dispatched.`;
+          else statusDiv.innerHTML = `<i class="fas fa-circle" style="color:#dc2626;"></i> <strong>STATUS: </strong> All systems operational | 8 ambulances available.`;
+        }
+      }, 5000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments - ESDS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div id="emergency-banner-container"></div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>📅 Dialysis Appointments</h2>
+            <div id="appointmentsList">
+                <table class="data-table">
+                    <thead>
+                        <tr><th>Patient</th><th>Date</th><th>Time</th><th>Center</th><th>Status</th><th>Action</th></tr>
+                    </thead>
+                    <tbody id="appointmentsTbody">
+                        <tr><td colspan="6">Loading appointments...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <button id="newAppointmentBtn" class="btn-primary">+ New Appointment</button>
+        </div>
+    </div>
+    <script>
+        // Simulated appointments data
+        const appointments = [
+            { patient: "John Rivera", date: "2026-05-10", time: "09:00", center: "ESDS Central", status: "Confirmed" },
+            { patient: "Maria Santos", date: "2026-05-10", time: "11:30", center: "North Center", status: "Pending" }
+        ];
+        function loadAppointments() {
+            const tbody = document.getElementById('appointmentsTbody');
+            if(tbody) {
+                tbody.innerHTML = appointments.map(a => `<tr><td>${a.patient}</td><td>${a.date}</td><td>${a.time}</td><td>${a.center}</td><td><span class="status-badge">${a.status}</span></td><td><button class="btn-small">Reschedule</button></td></tr>`).join('');
+            }
+        }
+        loadAppointments();
+    </script>
+</body>
+</html>

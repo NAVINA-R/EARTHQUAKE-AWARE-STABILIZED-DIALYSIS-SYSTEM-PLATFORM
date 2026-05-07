@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triage Calculator - ESDS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div id="emergency-banner-container"></div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>🏥 SAFE-QUAKE & DIALYSIS TRIAGE SYSTEM</h2>
+            <div class="flex-row">
+                <!-- Patient Input Form -->
+                <div class="triage-form" style="flex: 1;">
+                    <h3>📝 Patient Assessment</h3>
+                    <div class="form-group">
+                        <label>Patient Name</label>
+                        <input type="text" id="patientName" placeholder="Full name" value="Maria Santos">
+                    </div>
+                    <div class="form-group">
+                        <label>Entrapment Hours (≥4 = +1 point)</label>
+                        <input type="number" id="entrapmentHours" value="5" step="0.5">
+                    </div>
+                    <div class="form-group">
+                        <label>Blood pH (&lt;6.5 = +1 point)</label>
+                        <input type="number" id="ph" value="6.2" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Creatinine (&gt;2 mg/dL = +1 point)</label>
+                        <input type="number" id="creatinine" value="2.5" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>LDH (&gt;600 U/L = +1 point)</label>
+                        <input type="number" id="ldh" value="750" step="10">
+                    </div>
+                    <div class="form-group">
+                        <label>AST/ALT Ratio (&gt;2 = +1 point)</label>
+                        <input type="number" id="astAltRatio" value="2.3" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>Injured Extremities (count)</label>
+                        <input type="number" id="injuredExtremities" value="2">
+                    </div>
+                    <div class="form-group">
+                        <label>Albumin (≤3.0 = +2 points)</label>
+                        <input type="number" id="albumin" value="2.8" step="0.1">
+                    </div>
+                    <div class="form-group">
+                        <label>CK Level (&gt;3000 = +1 point)</label>
+                        <input type="number" id="ck" value="4500">
+                    </div>
+                    <div class="form-group">
+                        <label>Potassium Urgency (0-5 scale)</label>
+                        <input type="number" id="potassiumUrgency" value="3" max="5">
+                    </div>
+                    <div class="form-group">
+                        <label>Days Since Last Dialysis</label>
+                        <input type="number" id="daysSinceLastDialysis" value="4">
+                    </div>
+                    <button id="calculateAddBtn" class="btn-primary">➕ Calculate & Add to Queue</button>
+                </div>
+                
+                <!-- Priority Queue Display -->
+                <div class="queue-section" style="flex: 2;">
+                    <h3>📊 PRIORITY QUEUE (Sorted by Priority Score)</h3>
+                    <div style="overflow-x: auto;">
+                        <table class="priority-table">
+                            <thead>
+                                <tr><th>Rank</th><th>Patient</th><th>SAFE-QUAKE</th><th>Dialysis</th><th>Priority</th><th>Risk</th><th>Status</th></tr>
+                            </thead>
+                            <tbody id="queueTbody">
+                                <tr><td colspan="7">Loading patients...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button id="refreshQueueBtn" class="btn-outline">⟳ Refresh Queue</button>
+                    <button id="clearQueueBtn" class="btn-outline" style="background:#dc3545;">🗑 Clear Queue</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📖 Triage Guidelines</h2>
+            <div class="guidelines">
+                <p><strong>SAFE-QUAKE Score:</strong> Entrapment Hours(≥4) + pH(&lt;6.5) + Creatinine(&gt;2) + LDH(&gt;600) + AST/ALT(&gt;2)</p>
+                <p><strong>Dialysis Score:</strong> Injured Extremities + (Albumin≤3.0 ? +2) + (CK&gt;3000 ? +1)</p>
+                <p><strong>Priority =</strong> (DialysisScore × 10) + (SAFE-QUAKE × 5) + (PotassiumUrgency × 20) + (DaysSinceDialysis × 15)</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="js/triage.js"></script>
+    <script src="js/patients.js"></script>
+</body>
+</html>

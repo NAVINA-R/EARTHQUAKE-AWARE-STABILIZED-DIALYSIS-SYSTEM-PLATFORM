@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>ESDS Nurse/Technician Portal | Patient Care Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #ecfdf5;
+      color: #064e3b;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 280px;
+      height: 100%;
+      background: linear-gradient(180deg, #064e3b 0%, #022c22 100%);
+      color: white;
+      z-index: 100;
+      overflow-y: auto;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+    }
+
+    .sidebar-header {
+      padding: 28px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-header h2 {
+      font-size: 1.4rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-header h2 i { color: #34d399; }
+    .sidebar-header p { font-size: 0.7rem; opacity: 0.7; margin-top: 8px; }
+
+    .nav-menu { padding: 20px 0; }
+    .nav-item {
+      padding: 12px 24px;
+      margin: 4px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #a7f3d0;
+    }
+    .nav-item i { width: 24px; }
+    .nav-item.active, .nav-item:hover { background: rgba(52,211,153,0.2); color: white; }
+
+    /* Main content */
+    .main-content { margin-left: 280px; padding: 24px 32px; }
+
+    /* Top bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      background: white;
+      padding: 16px 28px;
+      border-radius: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .nurse-badge {
+      background: #d1fae5;
+      color: #065f46;
+      padding: 8px 20px;
+      border-radius: 40px;
+      font-weight: 600;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid #d1fae5;
+    }
+    .stat-number { font-size: 2rem; font-weight: 800; color: #065f46; }
+
+    /* Dashboard Grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      border-bottom: 2px solid #d1fae5;
+      padding-bottom: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #064e3b;
+    }
+    .btn-primary {
+      background: #059669;
+      color: white;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .btn-primary:hover { background: #047857; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid #10b981;
+      color: #059669;
+      padding: 6px 14px;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .btn-danger { background: #dc2626; }
+    .btn-danger:hover { background: #b91c1c; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: left; padding: 12px 6px; border-bottom: 1px solid #e5e7eb; font-size: 0.85rem; }
+    .session-card {
+      background: #f0fdf4;
+      padding: 14px;
+      border-radius: 16px;
+      margin-bottom: 12px;
+      border-left: 4px solid #10b981;
+    }
+    .vital-row { display: flex; gap: 12px; flex-wrap: wrap; margin: 10px 0; }
+    .vital-input { flex: 1; min-width: 80px; }
+    .vital-input label { font-size: 0.7rem; font-weight: 600; }
+    .vital-input input { width: 100%; padding: 6px; border-radius: 10px; border: 1px solid #cbd5e1; }
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: white;
+      padding: 28px;
+      border-radius: 28px;
+      width: 90%;
+      max-width: 550px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { font-weight: 600; display: block; margin-bottom: 6px; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+    }
+    @media (max-width: 900px) { .sidebar { width: 0; display: none; } .main-content { margin-left: 0; } }
+    .equipment-issue { background: #fef3c7; border-radius: 12px; padding: 10px; margin-top: 8px; }
+    .badge-warning { background: #fed7aa; color: #9b2c1d; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2><i class="fas fa-hand-holding-heart"></i> Nurse Station</h2>
+    <p>Patient Care · Dialysis Technician</p>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-item active" data-tab="overview"><i class="fas fa-chalkboard"></i> Overview</div>
+    <div class="nav-item" data-tab="patients"><i class="fas fa-procedures"></i> Assigned Patients</div>
+    <div class="nav-item" data-tab="sessions"><i class="fas fa-sync-alt"></i> Active Sessions</div>
+    <div class="nav-item" data-tab="vitals"><i class="fas fa-heartbeat"></i> Vitals Recording</div>
+    <div class="nav-item" data-tab="machines"><i class="fas fa-microscope"></i> Machine Assignments</div>
+    <div class="nav-item" data-tab="checklist"><i class="fas fa-clipboard-list"></i> Session Checklist</div>
+    <div class="nav-item" data-tab="emergency"><i class="fas fa-bolt"></i> Emergency Protocols</div>
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="top-bar">
+    <div><h1><i class="fas fa-user-nurse"></i> Nurse Maria Lopez</h1><span>Dialysis Unit · Shift: Morning (7am - 3pm)</span></div>
+    <div class="nurse-badge"><i class="fas fa-check-circle"></i> On Duty · 12 sessions today</div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid" id="statsContainer"></div>
+
+  <!-- Overview Tab -->
+  <div id="overviewTab">
+    <div class="dashboard-grid">
+      <div class="card"><div class="card-header">🩺 Today's Assigned Patients</div><div id="todaysPatientsList"></div></div>
+      <div class="card"><div class="card-header">⚡ Active Sessions</div><div id="activeSessionsPreview"></div></div>
+      <div class="card"><div class="card-header">📊 Vitals Recording Queue</div><div id="vitalsQueuePreview"></div></div>
+      <div class="card"><div class="card-header">🖥️ Machine Status</div><div id="machineStatusPreview"></div></div>
+    </div>
+    <div class="card"><div class="card-header">✅ Session Checklist Today</div><div id="checklistPreview"></div></div>
+  </div>
+
+  <!-- Assigned Patients Tab -->
+  <div id="patientsTab" style="display:none;">
+    <div class="card"><div class="card-header">📋 Assigned Patient List & Vitals Log</div>
+      <table id="patientsTable"><thead><tr><th>Patient</th><th>Age</th><th>Latest Vitals</th><th>Session Status</th><th>Actions</th></tr></thead><tbody id="patientsTableBody"></tbody></table>
+    </div>
+  </div>
+
+  <!-- Active Sessions Tab -->
+  <div id="sessionsTab" style="display:none;">
+    <div class="card"><div class="card-header">🔄 Active Dialysis Sessions</div><div id="activeSessionsList"></div></div>
+  </div>
+
+  <!-- Vitals Recording Tab -->
+  <div id="vitalsTab" style="display:none;">
+    <div class="card"><div class="card-header">📈 Record Patient Vitals (SpO2, HR, BP, Temp)</div><div id="vitalsRecordingPanel"></div></div>
+  </div>
+
+  <!-- Machine Assignments Tab -->
+  <div id="machinesTab" style="display:none;">
+    <div class="card"><div class="card-header">🖨️ Machine Assignments & Operation Parameters</div><div id="machinesList"></div><button class="btn-primary" id="reportIssueBtn" style="margin-top:16px;">⚠️ Report Equipment Issue</button></div>
+  </div>
+
+  <!-- Session Checklist Tab -->
+  <div id="checklistTab" style="display:none;">
+    <div class="card"><div class="card-header">✅ Session Completion Checklist</div><div id="checklistPanel"></div></div>
+  </div>
+
+  <!-- Emergency Protocols Tab -->
+  <div id="emergencyTab" style="display:none;">
+    <div class="card"><div class="card-header">🚨 Emergency Protocols & Adverse Event Documentation</div><div id="emergencyProtocolsContent"></div><button class="btn-primary btn-danger" id="documentAdverseBtn">📄 Document Adverse Event</button></div>
+  </div>
+
+  <!-- Modals -->
+  <div id="vitalsModal" class="modal"><div class="modal-content"><h3>Record Vitals</h3><input type="text" id="vitalsPatientId" placeholder="Patient ID"><div class="vital-row"><div class="vital-input"><label>SpO2 (%)</label><input type="number" id="spo2"></div><div class="vital-input"><label>HR (bpm)</label><input type="number" id="hr"></div></div><div class="vital-row"><div class="vital-input"><label>BP (Sys/Dia)</label><input type="text" id="bp" placeholder="120/80"></div><div class="vital-input"><label>Temp (°C)</label><input type="text" id="temp"></div></div><button id="saveVitalsBtn">Save Vitals</button><button onclick="closeModal('vitalsModal')">Cancel</button></div></div>
+  <div id="issueModal" class="modal"><div class="modal-content"><h3>Report Equipment Issue</h3><select id="machineSelect"><option>Machine A-01</option><option>Machine A-02</option><option>Machine B-03</option></select><textarea id="issueDesc" placeholder="Describe issue..."></textarea><button id="submitIssueBtn">Submit Report</button><button onclick="closeModal('issueModal')">Cancel</button></div></div>
+  <div id="adverseModal" class="modal"><div class="modal-content"><h3>Document Adverse Event</h3><input type="text" id="patientIdAdverse" placeholder="Patient ID"><textarea id="adverseDesc" placeholder="Describe reaction / event"></textarea><button id="saveAdverseBtn">Save Report</button><button onclick="closeModal('adverseModal')">Cancel</button></div></div>
+</div>
+
+<script>
+  // Mock Data
+  let patients = [
+    { id: "P001", name: "John Smith", age: 58, vitals: { spo2: 96, hr: 78, bp: "130/85", temp: 36.6 }, sessionStatus: "In Progress", machineAssigned: "A-01" },
+    { id: "P002", name: "Mary Johnson", age: 62, vitals: { spo2: 94, hr: 82, bp: "145/90", temp: 37.0 }, sessionStatus: "Waiting", machineAssigned: "A-02" },
+    { id: "P003", name: "Robert Lee", age: 45, vitals: { spo2: 98, hr: 68, bp: "118/76", temp: 36.4 }, sessionStatus: "Completed", machineAssigned: "B-03" },
+    { id: "P004", name: "Emma Watson", age: 51, vitals: { spo2: 92, hr: 88, bp: "150/92", temp: 37.2 }, sessionStatus: "In Progress", machineAssigned: "A-03" }
+  ];
+
+  let activeSessions = [
+    { patientId: "P001", patientName: "John Smith", startTime: "08:30 AM", machine: "A-01", status: "running", checklistCompleted: false },
+    { patientId: "P004", patientName: "Emma Watson", startTime: "09:00 AM", machine: "A-03", status: "running", checklistCompleted: false }
+  ];
+
+  let machineParameters = [
+    { machineId: "A-01", model: "Fresenius 4008", bloodFlow: "320 ml/min", dialysateFlow: "500 ml/min", status: "Operational" },
+    { machineId: "A-02", model: "Baxter AK98", bloodFlow: "300 ml/min", dialysateFlow: "500 ml/min", status: "Operational" },
+    { machineId: "B-03", model: "Nipro Surdial", bloodFlow: "280 ml/min", dialysateFlow: "450 ml/min", status: "Maintenance Required" }
+  ];
+
+  let equipmentIssues = [];
+  let adverseEvents = [];
+  let sessionNotes = ["Pre-session BP recorded for P001", "Machine calibration checked"];
+
+  function updateStats() {
+    let inProgress = activeSessions.filter(s => s.status === "running").length;
+    let pendingVitals = patients.filter(p => p.sessionStatus === "In Progress" && (!p.vitalsUpdatedToday)).length || 2;
+    document.getElementById('statsContainer').innerHTML = `
+      <div class="stat-card"><i class="fas fa-bed"></i><div class="stat-number">${patients.length}</div>Assigned Patients</div>
+      <div class="stat-card"><i class="fas fa-play-circle"></i><div class="stat-number">${inProgress}</div>Active Sessions</div>
+      <div class="stat-card"><i class="fas fa-stethoscope"></i><div class="stat-number">${pendingVitals}</div>Vitals Queue</div>
+      <div class="stat-card"><i class="fas fa-microscope"></i><div class="stat-number">${machineParameters.filter(m=>m.status==='Operational').length}</div>Active Machines</div>
+    `;
+  }
+
+  function renderOverview() {
+    document.getElementById('todaysPatientsList').innerHTML = patients.map(p => `<div class="session-card"><strong>${p.name}</strong> (${p.age})<br>Machine: ${p.machineAssigned} | Session: ${p.sessionStatus}<br>Vitals: ${p.vitals.bp} | HR ${p.vitals.hr}</div>`).join('');
+    document.getElementById('activeSessionsPreview').innerHTML = activeSessions.map(s => `<div class="session-card">🟢 ${s.patientName} on ${s.machine} since ${s.startTime}</div>`).join('');
+    document.getElementById('vitalsQueuePreview').innerHTML = patients.filter(p => p.sessionStatus === "In Progress").map(p => `<div>⏱️ ${p.name} - Vitals due in 30 min</div>`).join('');
+    document.getElementById('machineStatusPreview').innerHTML = machineParameters.map(m => `<div>🖨️ ${m.machineId}: ${m.status} (Flow: ${m.bloodFlow})</div>`).join('');
+    document.getElementById('checklistPreview').innerHTML = `<div class="session-card">☑️ Pre-session checklist: Machine disinfection, Patient ID verification<br>☑️ Mid-session: Vitals monitoring, Blood pressure check</div>`;
+  }
+
+  function renderPatientsTable() {
+    const tbody = document.getElementById('patientsTableBody');
+    tbody.innerHTML = patients.map(p => `
+      <tr><td>${p.name}</td><td>${p.age}</td><td>SpO2:${p.vitals.spo2}% HR:${p.vitals.hr}</td><td>${p.sessionStatus}</td>
+      <td><button class="btn-outline" onclick="openVitalsModal('${p.id}')">Record Vitals</button> <button class="btn-outline" onclick="uploadSessionNotes('${p.id}')">Session Notes</button></td></tr>
+    `).join('');
+  }
+
+  window.openVitalsModal = (pid) => {
+    document.getElementById('vitalsPatientId').value = pid;
+    document.getElementById('vitalsModal').style.display = 'flex';
+  };
+  document.getElementById('saveVitalsBtn').onclick = () => {
+    let pid = document.getElementById('vitalsPatientId').value;
+    let spo2 = document.getElementById('spo2').value;
+    let hr = document.getElementById('hr').value;
+    let bp = document.getElementById('bp').value;
+    let temp = document.getElementById('temp').value;
+    let patient = patients.find(p => p.id === pid);
+    if(patient) {
+      patient.vitals = { spo2: spo2 || 95, hr: hr || 70, bp: bp || "120/80", temp: temp || 36.5 };
+      alert(`Vitals recorded for ${patient.name}`);
+      renderPatientsTable(); renderOverview();
+    }
+    closeModal('vitalsModal');
+  };
+
+  function renderActiveSessions() {
+    const container = document.getElementById('activeSessionsList');
+    container.innerHTML = activeSessions.map(s => `
+      <div class="session-card"><div><strong>${s.patientName}</strong> | Machine ${s.machine} | Started: ${s.startTime}</div>
+      <div class="vital-row"><button class="btn-outline" onclick="markSessionComplete('${s.patientId}')">✅ Mark Session Completion</button>
+      <button class="btn-outline" onclick="logMachineParams('${s.machine}')">Log Machine Parameters</button></div></div>
+    `).join('');
+  }
+  window.markSessionComplete = (pid) => {
+    let patient = patients.find(p => p.id === pid);
+    if(patient) { patient.sessionStatus = "Completed"; alert(`Session completed for ${patient.name}. Session notes uploaded.`); renderActiveSessions(); renderPatientsTable(); renderOverview(); updateStats(); }
+  };
+  window.logMachineParams = (mid) => { alert(`Machine ${mid} parameters logged: Blood flow stable, pressure normal.`); };
+
+  function renderVitalsPanel() {
+    const panel = document.getElementById('vitalsRecordingPanel');
+    panel.innerHTML = patients.filter(p => p.sessionStatus !== "Completed").map(p => `
+      <div class="session-card"><strong>${p.name}</strong> - Current Vitals: ${p.vitals.bp}, HR ${p.vitals.hr}, SpO2 ${p.vitals.spo2}%<br>
+      <button class="btn-primary" onclick="openVitalsModal('${p.id}')">Update Vitals Now</button></div>
+    `).join('');
+  }
+
+  function renderMachines() {
+    const container = document.getElementById('machinesList');
+    container.innerHTML = machineParameters.map(m => `
+      <div class="session-card"><strong>${m.machineId}</strong> (${m.model})<br>Blood Flow: ${m.bloodFlow} | Dialysate: ${m.dialysateFlow}<br>Status: ${m.status}<button class="btn-outline" onclick="reportMachineIssue('${m.machineId}')">Report Issue</button></div>
+    `).join('');
+  }
+  window.reportMachineIssue = (mid) => { document.getElementById('machineSelect').value = mid; document.getElementById('issueModal').style.display = 'flex'; };
+  document.getElementById('submitIssueBtn').onclick = () => {
+    let machine = document.getElementById('machineSelect').value;
+    let desc = document.getElementById('issueDesc').value;
+    equipmentIssues.push({ machine, desc, time: new Date().toLocaleString() });
+    alert(`Issue reported for ${machine}. Maintenance notified.`);
+    closeModal('issueModal');
+  };
+  document.getElementById('reportIssueBtn').onclick = () => document.getElementById('issueModal').style.display = 'flex';
+
+  function renderChecklist() {
+    const container = document.getElementById('checklistPanel');
+    container.innerHTML = `
+      <div class="session-card">✅ Patient identity verification completed</div>
+      <div class="session-card">✅ Machine setup & sterilization (pre-session)</div>
+      <div class="session-card">✅ Initial vitals recorded</div>
+      <div class="session-card">⏳ Mid-session vitals monitoring (in progress)</div>
+      <div class="session-card">☑️ Post-session machine disinfection (pending)</div>
+      <button class="btn-primary" onclick="completeChecklist()">Mark Session Checklist Complete</button>
+    `;
+  }
+  window.completeChecklist = () => { alert("Session checklist completed for current batch. Documentation saved."); };
+
+  function renderEmergencyProtocols() {
+    document.getElementById('emergencyProtocolsContent').innerHTML = `
+      <div class="session-card">🚨 <strong>Cardiac Arrest Protocol:</strong> Call code blue, start CPR, use AED</div>
+      <div class="session-card">⚠️ <strong>Hypotension during dialysis:</strong> Stop ultrafiltration, Trendelenburg position, fluids</div>
+      <div class="session-card">🩸 <strong>Air Embolism:</strong> Clamp lines, position patient left side down, 100% O2</div>
+      <div class="session-card">🔥 <strong>Machine alarm / Fire:</strong> Evacuate, cut power, use fire extinguisher</div>
+    `;
+  }
+  document.getElementById('documentAdverseBtn').onclick = () => document.getElementById('adverseModal').style.display = 'flex';
+  document.getElementById('saveAdverseBtn').onclick = () => {
+    let pid = document.getElementById('patientIdAdverse').value;
+    let desc = document.getElementById('adverseDesc').value;
+    adverseEvents.push({ patient: pid, event: desc, timestamp: new Date().toLocaleString() });
+    alert("Adverse event documented and reported to supervisor.");
+    closeModal('adverseModal');
+  };
+
+  window.uploadSessionNotes = (pid) => { let note = prompt("Enter session note:"); if(note) { sessionNotes.push(`${pid}: ${note}`); alert("Session note saved."); } };
+
+  function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+  // Tab switching
+  const tabs = ['overview','patients','sessions','vitals','machines','checklist','emergency'];
+  function switchTab(tabId) {
+    tabs.forEach(t => { let el = document.getElementById(t+'Tab'); if(el) el.style.display = t===tabId ? 'block' : 'none'; });
+    if(tabId === 'patients') renderPatientsTable();
+    if(tabId === 'sessions') renderActiveSessions();
+    if(tabId === 'vitals') renderVitalsPanel();
+    if(tabId === 'machines') renderMachines();
+    if(tabId === 'checklist') renderChecklist();
+    if(tabId === 'emergency') renderEmergencyProtocols();
+  }
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const tab = item.getAttribute('data-tab');
+      switchTab(tab);
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  updateStats(); renderOverview(); renderPatientsTable(); renderActiveSessions(); renderVitalsPanel(); renderMachines(); renderChecklist(); renderEmergencyProtocols(); switchTab('overview');
+</script>
+</body>
+</html>

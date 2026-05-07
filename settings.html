@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - ESDS</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div id="emergency-banner-container"></div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>⚙️ System Settings</h2>
+            <div class="settings-section">
+                <h3>Notification Preferences</h3>
+                <label><input type="checkbox" checked> Email Alerts</label>
+                <label><input type="checkbox" checked> SMS Alerts</label>
+                <label><input type="checkbox"> Push Notifications</label>
+            </div>
+            <div class="settings-section">
+                <h3>Emergency Thresholds</h3>
+                <label>Priority Threshold: <input type="number" value="80"></label>
+                <label>Critical Priority: <input type="number" value="150"></label>
+            </div>
+            <div class="settings-section">
+                <h3>Account Settings</h3>
+                <button class="btn-outline">Change Password</button>
+                <button class="btn-outline">Export Data</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

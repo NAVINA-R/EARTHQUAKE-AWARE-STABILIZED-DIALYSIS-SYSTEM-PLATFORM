@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Map - ESDS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div id="emergency-banner-container"></div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>🗺️ Disaster Response & Facility Map</h2>
+            <div id="map" style="height: 500px; border-radius: 16px;"></div>
+        </div>
+        
+        <div class="card">
+            <h2>📍 Nearby Facilities</h2>
+            <div id="facilitiesList" class="facilities-grid"></div>
+        </div>
+    </div>
+    
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="js/map.js"></script>
+</body>
+</html>

@@ -1,0 +1,551 @@
+Here is the complete admin dashboard HTML/CSS code with all the requested features for the Super Admin.
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>ESDS Super Admin | Full Platform Control</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f0f2f5;
+      color: #1a2634;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 280px;
+      height: 100%;
+      background: linear-gradient(180deg, #0f2b3d 0%, #0a1c2a 100%);
+      color: white;
+      z-index: 100;
+      transition: all 0.3s;
+      overflow-y: auto;
+      box-shadow: 2px 0 12px rgba(0,0,0,0.08);
+    }
+
+    .sidebar-header {
+      padding: 28px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+    .sidebar-header h2 {
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-header h2 i {
+      color: #ef4444;
+    }
+    .sidebar-header p {
+      font-size: 0.75rem;
+      opacity: 0.7;
+      margin-top: 8px;
+    }
+
+    .nav-menu {
+      padding: 20px 0;
+    }
+    .nav-item {
+      padding: 12px 24px;
+      margin: 4px 12px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #cbd5e1;
+    }
+    .nav-item i {
+      width: 24px;
+      font-size: 1.2rem;
+    }
+    .nav-item.active, .nav-item:hover {
+      background: rgba(239, 68, 68, 0.2);
+      color: white;
+    }
+
+    /* Main content */
+    .main-content {
+      margin-left: 280px;
+      padding: 24px 32px;
+    }
+
+    /* Top bar */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+      background: white;
+      padding: 16px 28px;
+      border-radius: 24px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .page-title h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+    .admin-badge {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 8px 16px;
+      border-radius: 40px;
+      font-weight: 600;
+    }
+
+    /* Stats cards */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      border: 1px solid #eef2f6;
+    }
+    .stat-card i {
+      font-size: 2rem;
+      color: #ef4444;
+      margin-bottom: 12px;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    /* Dashboard grid */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+    .card {
+      background: white;
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: 0.2s;
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #f1f5f9;
+      padding-bottom: 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+    .badge-danger {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      text-align: left;
+      padding: 12px 6px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 0.85rem;
+    }
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    .status-active { background: #d1fae5; color: #065f46; }
+    .status-suspended { background: #fee2e2; color: #991b1b; }
+    .btn-icon {
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin: 0 4px;
+      font-size: 1rem;
+    }
+    .btn-approve { color: #059669; }
+    .btn-suspend { color: #d97706; }
+    .btn-delete { color: #dc2626; }
+    .emergency-override {
+      background: #fff1f0;
+      border-left: 5px solid #dc2626;
+      padding: 14px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+    }
+    .flex-between {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .btn-primary {
+      background: #dc2626;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    @media (max-width: 900px) {
+      .sidebar { width: 0; display: none; }
+      .main-content { margin-left: 0; }
+    }
+    .log-entry {
+      font-family: monospace;
+      font-size: 0.75rem;
+      padding: 6px 0;
+      border-bottom: 1px solid #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+
+<div class="sidebar">
+  <div class="sidebar-header">
+    <h2><i class="fas fa-shield-alt"></i> ESDS Admin</h2>
+    <p>Super Administrator · Full Control</p>
+  </div>
+  <div class="nav-menu">
+    <div class="nav-item active" data-tab="overview"><i class="fas fa-tachometer-alt"></i> Overview</div>
+    <div class="nav-item" data-tab="users"><i class="fas fa-users"></i> User Management</div>
+    <div class="nav-item" data-tab="centers"><i class="fas fa-hospital"></i> Dialysis Centers</div>
+    <div class="nav-item" data-tab="audit"><i class="fas fa-history"></i> Audit Logs</div>
+    <div class="nav-item" data-tab="system"><i class="fas fa-cog"></i> System Settings</div>
+    <div class="nav-item" data-tab="reports"><i class="fas fa-chart-bar"></i> Reports</div>
+    <div class="nav-item" data-tab="security"><i class="fas fa-shield-virus"></i> Security Events</div>
+  </div>
+</div>
+
+<div class="main-content">
+  <div class="top-bar">
+    <div class="page-title">
+      <h1><i class="fas fa-crown"></i> Super Admin Console</h1>
+      <span>Full platform oversight · Emergency override ready</span>
+    </div>
+    <div class="admin-badge"><i class="fas fa-check-circle"></i> Root Access</div>
+  </div>
+
+  <!-- Emergency Override Banner -->
+  <div class="emergency-override" id="emergencyOverridePanel">
+    <div class="flex-between">
+      <div><i class="fas fa-bell" style="color:#dc2626;"></i> <strong>EMERGENCY MODE CONTROL</strong> — Override regional status</div>
+      <button class="btn-primary" id="toggleEmergencyBtn" style="background:#b91c1c;">🔴 Activate System-Wide Emergency</button>
+    </div>
+    <p style="margin-top: 8px; font-size:0.8rem;" id="emergencyStatusText">Current mode: NORMAL (All systems operational)</p>
+  </div>
+
+  <!-- STATS CARDS (Database + active sessions) -->
+  <div class="stats-grid" id="statsContainer">
+    <!-- dynamic JS will fill -->
+  </div>
+
+  <!-- Dashboard Grid: Users by role, platform health etc -->
+  <div class="dashboard-grid" id="overviewTab">
+    <div class="card">
+      <div class="card-header">👥 Users by Role <i class="fas fa-chart-pie"></i></div>
+      <div id="roleStats"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">📊 Platform Health & Database Stats</div>
+      <div id="healthStats"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">🟢 Active Sessions <i class="fas fa-circle" style="color:#10b981; font-size: 10px;"></i></div>
+      <div id="activeSessionsList"></div>
+    </div>
+    <div class="card">
+      <div class="card-header">⚠️ Recent Error Logs</div>
+      <div id="errorLogsList"></div>
+    </div>
+  </div>
+
+  <!-- USER MANAGEMENT TABLE (All roles) -->
+  <div id="usersTab" style="display:none;">
+    <div class="card" style="padding: 20px;">
+      <div class="card-header">👨‍⚕️ Manage All Users (Doctors, Patients, Centers, Council, Attenders)</div>
+      <div style="overflow-x: auto;">
+        <table id="usersTable">
+          <thead>
+            <tr><th>ID</th><th>Full Name</th><th>Role</th><th>Email</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody id="usersTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dialysis Centers -->
+  <div id="centersTab" style="display:none;">
+    <div class="card">
+      <div class="card-header">🏥 Dialysis Centers Management <button class="btn-primary" id="addCenterBtn" style="padding:4px 12px; font-size:0.8rem;">+ Add Center</button></div>
+      <div id="centersList"></div>
+    </div>
+  </div>
+
+  <!-- Audit Logs Tab -->
+  <div id="auditTab" style="display:none;">
+    <div class="card"><div class="card-header">📜 Complete Audit Logs</div><div id="auditLogsContainer"></div></div>
+  </div>
+
+  <!-- System Settings Tab -->
+  <div id="systemTab" style="display:none;">
+    <div class="card"><div class="card-header">⚙️ System Configuration</div>
+      <label>Default Emergency Threshold: <input type="number" id="emergencyThreshold" value="85"> %</label><br><br>
+      <label>Maintenance Mode: <input type="checkbox" id="maintMode"> Enable</label><br><br>
+      <button class="btn-primary" id="saveSysSettings">Save Settings</button>
+    </div>
+  </div>
+
+  <!-- Reports Tab -->
+  <div id="reportsTab" style="display:none;">
+    <div class="card"><div class="card-header">📈 System-wide Reports</div>
+      <button class="btn-primary" id="genUserReport">Generate User Activity Report</button>
+      <button class="btn-primary" id="genCenterReport" style="margin-left:12px;">Center Utilization Report</button>
+      <div id="reportOutput" style="margin-top:20px; background:#f8fafc; padding:16px; border-radius:16px;"></div>
+    </div>
+  </div>
+
+  <!-- Security Events Tab -->
+  <div id="securityTab" style="display:none;">
+    <div class="card"><div class="card-header">🔐 Security Events & Alerts</div><div id="securityEventsList"></div></div>
+  </div>
+</div>
+
+<script>
+  // ---------- SUPER ADMIN MOCK DATA ----------
+  let users = [
+    { id: 1, name: "Dr. Sarah Chen", role: "doctor", email: "sarah.chen@esds.com", status: "active" },
+    { id: 2, name: "John Smith", role: "patient", email: "john.smith@email.com", status: "active" },
+    { id: 3, name: "Nurse Emma Wilson", role: "nurse", email: "emma.w@esds.com", status: "active" },
+    { id: 4, name: "City Dialysis Center", role: "center-admin", email: "admin@citydialysis.com", status: "active" },
+    { id: 5, name: "Regional Council Office", role: "council", email: "council@region.gov", status: "suspended" },
+    { id: 6, name: "David Attender", role: "attender", email: "david.att@esds.com", status: "active" },
+    { id: 7, name: "Dr. Michael Lee", role: "doctor", email: "michael.lee@cardio.com", status: "active" },
+    { id: 8, name: "Maria Garcia", role: "patient", email: "maria.garcia@email.com", status: "active" }
+  ];
+
+  let dialysisCenters = [
+    { id: 1, name: "City Central Dialysis", location: "Downtown", capacity: 12, activeMachines: 10 },
+    { id: 2, name: "Northside Kidney Care", location: "North District", capacity: 8, activeMachines: 7 }
+  ];
+
+  let auditLogs = [
+    { time: "2025-05-07 08:23:12", action: "Admin override emergency mode", user: "superadmin" },
+    { time: "2025-05-07 07:15:44", action: "User Dr. Sarah Chen approved", user: "superadmin" },
+    { time: "2025-05-06 22:10:03", action: "Security alert: multiple failed logins", user: "system" }
+  ];
+
+  let errorLogs = [
+    "API timeout - ambulance tracking (2025-05-07 09:12)",
+    "Database connection pool warning (2025-05-07 08:45)",
+    "MQTT sensor data latency (2025-05-07 07:30)"
+  ];
+
+  let securityEvents = [
+    "🔒 Unusual login attempt from IP 45.67.xx.xx - blocked",
+    "⚠️ Role change requested: patient → doctor (pending review)",
+    "🛡️ 2FA enabled for admin account"
+  ];
+
+  let activeSessions = [
+    { user: "Dr. Sarah Chen", role: "doctor", lastActive: "2 min ago" },
+    { user: "Admin Root", role: "superadmin", lastActive: "Now" },
+    { user: "City Dialysis Center", role: "center-admin", lastActive: "5 min ago" }
+  ];
+
+  let emergencyModeActive = false;
+
+  // Helper update all UI
+  function updateStatsCards() {
+    const totalUsers = users.length;
+    const activeUsers = users.filter(u => u.status === 'active').length;
+    const doctors = users.filter(u => u.role === 'doctor').length;
+    const patients = users.filter(u => u.role === 'patient').length;
+    const centers = users.filter(u => u.role === 'center-admin').length;
+    const council = users.filter(u => u.role === 'council').length;
+    const attenders = users.filter(u => u.role === 'attender').length;
+    document.getElementById('statsContainer').innerHTML = `
+      <div class="stat-card"><i class="fas fa-users"></i><div class="stat-number">${totalUsers}</div><div>Total Users</div></div>
+      <div class="stat-card"><i class="fas fa-user-md"></i><div class="stat-number">${doctors}</div><div>Doctors</div></div>
+      <div class="stat-card"><i class="fas fa-procedures"></i><div class="stat-number">${patients}</div><div>Patients</div></div>
+      <div class="stat-card"><i class="fas fa-building"></i><div class="stat-number">${centers}</div><div>Centers</div></div>
+      <div class="stat-card"><i class="fas fa-landmark"></i><div class="stat-number">${council}</div><div>Council</div></div>
+      <div class="stat-card"><i class="fas fa-hand-paper"></i><div class="stat-number">${attenders}</div><div>Attenders</div></div>
+      <div class="stat-card"><i class="fas fa-database"></i><div class="stat-number">128GB</div><div>DB Size</div></div>
+      <div class="stat-card"><i class="fas fa-charging-station"></i><div class="stat-number">${activeSessions.length}</div><div>Active Sessions</div></div>
+    `;
+    document.getElementById('roleStats').innerHTML = `
+      <ul style="list-style:none;"> <li>👨‍⚕️ Doctors: ${doctors}</li> <li>🧑‍🤝‍🧑 Patients: ${patients}</li> <li>🏥 Center Admins: ${centers}</li> <li>🏛️ Council: ${council}</li> <li>🛠️ Attenders: ${attenders}</li> </ul>
+    `;
+    document.getElementById('healthStats').innerHTML = `<p>✅ API Response: 124ms<br>✅ Uptime: 99.98%<br>📀 Database connections: 14/50<br>🚀 Redis cache hit: 87%</p>`;
+    document.getElementById('activeSessionsList').innerHTML = activeSessions.map(s => `<div class="log-entry"><i class="fas fa-user-circle"></i> ${s.user} (${s.role}) - last active ${s.lastActive}</div>`).join('');
+    document.getElementById('errorLogsList').innerHTML = errorLogs.map(e => `<div class="log-entry"><i class="fas fa-bug"></i> ${e}</div>`).join('');
+    document.getElementById('securityEventsList').innerHTML = securityEvents.map(se => `<div class="log-entry"><i class="fas fa-shield-alt"></i> ${se}</div>`).join('');
+  }
+
+  function renderUsersTable() {
+    const tbody = document.getElementById('usersTableBody');
+    tbody.innerHTML = users.map(user => `
+      <tr>
+        <td>${user.id}</td><td>${user.name}</td><td>${user.role}</td><td>${user.email}</td>
+        <td><span class="status-badge ${user.status === 'active' ? 'status-active' : 'status-suspended'}">${user.status}</span></td>
+        <td>
+          <button class="btn-icon btn-approve" onclick="approveUser(${user.id})"><i class="fas fa-check-circle"></i></button>
+          <button class="btn-icon btn-suspend" onclick="suspendUser(${user.id})"><i class="fas fa-pause-circle"></i></button>
+          <button class="btn-icon btn-delete" onclick="deleteUser(${user.id})"><i class="fas fa-trash-alt"></i></button>
+        </td>
+      </tr>
+    `).join('');
+  }
+
+  window.approveUser = (id) => {
+    let user = users.find(u => u.id === id);
+    if(user) { user.status = 'active'; addAuditLog(`Approved user ${user.name}`); renderUsersTable(); updateStatsCards(); }
+  };
+  window.suspendUser = (id) => {
+    let user = users.find(u => u.id === id);
+    if(user) { user.status = user.status === 'active' ? 'suspended' : 'active'; addAuditLog(`Suspended/Unsuspended ${user.name}`); renderUsersTable(); updateStatsCards(); }
+  };
+  window.deleteUser = (id) => {
+    users = users.filter(u => u.id !== id);
+    addAuditLog(`Deleted user ID ${id}`);
+    renderUsersTable();
+    updateStatsCards();
+  };
+
+  function addAuditLog(action) {
+    auditLogs.unshift({ time: new Date().toLocaleString(), action: action, user: "superadmin" });
+    renderAuditLogs();
+  }
+
+  function renderAuditLogs() {
+    document.getElementById('auditLogsContainer').innerHTML = auditLogs.map(log => `<div class="log-entry"><strong>${log.time}</strong> - ${log.action} (by ${log.user})</div>`).join('');
+  }
+
+  function renderCenters() {
+    const centersDiv = document.getElementById('centersList');
+    centersDiv.innerHTML = dialysisCenters.map(c => `
+      <div class="flex-between" style="padding: 12px; border-bottom:1px solid #eee;">
+        <div><i class="fas fa-clinic-medical"></i> <strong>${c.name}</strong> - ${c.location} | Beds: ${c.activeMachines}/${c.capacity}</div>
+        <div><button onclick="deleteCenter(${c.id})" class="btn-icon btn-delete"><i class="fas fa-trash"></i></button></div>
+      </div>
+    `).join('');
+  }
+  window.deleteCenter = (id) => {
+    dialysisCenters = dialysisCenters.filter(c => c.id !== id);
+    renderCenters();
+    addAuditLog(`Removed dialysis center ID ${id}`);
+  };
+  document.getElementById('addCenterBtn')?.addEventListener('click', () => {
+    let newName = prompt("Center Name");
+    if(newName) {
+      let newId = Date.now();
+      dialysisCenters.push({ id: newId, name: newName, location: "New Region", capacity: 10, activeMachines: 5 });
+      renderCenters();
+      addAuditLog(`Added new dialysis center: ${newName}`);
+    }
+  });
+
+  // Emergency Override
+  const toggleBtn = document.getElementById('toggleEmergencyBtn');
+  const emergencyStatusSpan = document.getElementById('emergencyStatusText');
+  toggleBtn.addEventListener('click', () => {
+    emergencyModeActive = !emergencyModeActive;
+    if(emergencyModeActive) {
+      toggleBtn.innerHTML = "🟢 Deactivate Emergency Mode";
+      toggleBtn.style.background = "#10b981";
+      emergencyStatusSpan.innerHTML = "Current mode: 🔴 SYSTEM-WIDE EMERGENCY ACTIVE — All resources overridden";
+      addAuditLog("ACTIVATED global emergency override mode");
+    } else {
+      toggleBtn.innerHTML = "🔴 Activate System-Wide Emergency";
+      toggleBtn.style.background = "#b91c1c";
+      emergencyStatusSpan.innerHTML = "Current mode: NORMAL (All systems operational)";
+      addAuditLog("DEACTIVATED global emergency override mode");
+    }
+  });
+
+  // Report Generation
+  document.getElementById('genUserReport')?.addEventListener('click', () => {
+    let report = `📋 USER ACTIVITY REPORT\nTotal registered: ${users.length}\nActive: ${users.filter(u=>u.status==='active').length}\nBy role: Doctors ${users.filter(u=>u.role==='doctor').length}, Patients ${users.filter(u=>u.role==='patient').length}\n\nLast 7 days signups: 12 new users.`;
+    document.getElementById('reportOutput').innerHTML = `<pre>${report}</pre>`;
+    addAuditLog("Generated User Activity Report");
+  });
+  document.getElementById('genCenterReport')?.addEventListener('click', () => {
+    let rep = `🏥 CENTER UTILIZATION:\n${dialysisCenters.map(c=>`${c.name}: ${c.activeMachines}/${c.capacity} machines active`).join('\n')}\nTotal capacity: ${dialysisCenters.reduce((a,c)=>a+c.capacity,0)}`;
+    document.getElementById('reportOutput').innerHTML = `<pre>${rep}</pre>`;
+  });
+
+  // System settings
+  document.getElementById('saveSysSettings')?.addEventListener('click', () => {
+    let threshold = document.getElementById('emergencyThreshold').value;
+    let maint = document.getElementById('maintMode').checked;
+    addAuditLog(`System settings updated: Emergency threshold = ${threshold}%, Maintenance mode = ${maint}`);
+    alert("Settings saved!");
+  });
+
+  // Tab navigation
+  const tabs = ['overview','users','centers','audit','system','reports','security'];
+  function switchTab(tabId) {
+    tabs.forEach(t => {
+      const el = document.getElementById(t+'Tab');
+      if(el) el.style.display = t===tabId ? 'block' : 'none';
+    });
+    if(tabId === 'users') renderUsersTable();
+    if(tabId === 'centers') renderCenters();
+    if(tabId === 'audit') renderAuditLogs();
+    if(tabId === 'security') document.getElementById('securityEventsList').innerHTML = securityEvents.map(se => `<div class="log-entry">⚠️ ${se}</div>`).join('');
+  }
+  document.querySelectorAll('.nav-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const tab = item.getAttribute('data-tab');
+      switchTab(tab);
+      document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+      item.classList.add('active');
+    });
+  });
+
+  // initial load
+  updateStatsCards();
+  renderUsersTable();
+  renderCenters();
+  renderAuditLogs();
+  switchTab('overview');
+  // platform health metrics auto refresh simulation
+  setInterval(() => {
+    // Simulate new error or session update occasionally
+    if(Math.random() > 0.8) {
+      errorLogs.unshift(`Dynamic warning: Admin check at ${new Date().toLocaleTimeString()}`);
+      if(errorLogs.length > 5) errorLogs.pop();
+      updateStatsCards();
+    }
+  }, 15000);
+</script>
+</body>
+</html>
+```

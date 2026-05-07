@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - ESDS Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-container {
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .login-header {
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      color: white;
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .login-header i {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+    }
+
+    .login-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .login-header p {
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+
+    .login-form {
+      padding: 40px 32px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #1e2a3e;
+      font-size: 0.9rem;
+    }
+
+    .form-group label i {
+      margin-right: 8px;
+      color: #dc2626;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s ease;
+      background: #f8fafc;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #dc2626;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.1);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 16px;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(220, 38, 38, 0.3);
+    }
+
+    .register-link {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .register-link a {
+      color: #dc2626;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .register-link a:hover {
+      text-decoration: underline;
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .back-home a {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .back-home a:hover {
+      color: #dc2626;
+    }
+
+    .alert-message {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      color: #991b1b;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .alert-message.show {
+      display: block;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    @media (max-width: 480px) {
+      .login-header { padding: 30px 24px; }
+      .login-form { padding: 30px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <i class="fas fa-heartbeat"></i>
+      <h1>Welcome Back</h1>
+      <p>Sign in to access your ESDS dashboard</p>
+    </div>
+    <div class="login-form">
+      <div id="errorAlert" class="alert-message">
+        <i class="fas fa-exclamation-triangle"></i> Invalid credentials. Please try again.
+      </div>
+      <form id="loginForm">
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Email Address</label>
+          <input type="email" id="email" placeholder="doctor@esds.com" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-lock"></i> Password</label>
+          <input type="password" id="password" placeholder="••••••••" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-user-tag"></i> Select Role</label>
+          <select id="role">
+            <option value="patient">👤 Patient</option>
+            <option value="doctor">👨‍⚕️ Doctor</option>
+            <option value="nurse">👩‍⚕️ Nurse</option>
+            <option value="admin">🏥 Admin</option>
+            <option value="center-admin">📋 Center Admin</option>
+            <option value="council">🏛️ Council</option>
+            <option value="attender">🛠️ Attender</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-login">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+      </form>
+      <div class="register-link">
+        Don't have an account? <a href="register.html">Register here</a>
+      </div>
+      <div class="back-home">
+        <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      let email = document.getElementById('email').value;
+      let password = document.getElementById('password').value;
+      let role = document.getElementById('role').value;
+      let errorDiv = document.getElementById('errorAlert');
+      
+      // Simple validation
+      if (!email || !password) {
+        errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please enter both email and password.';
+        errorDiv.classList.add('show');
+        setTimeout(() => errorDiv.classList.remove('show'), 3000);
+        return;
+      }
+      
+      // Demo credentials check (you can replace with actual auth)
+      if (email && password.length >= 1) {
+        // Role-based redirection logic
+        switch(role) {
+          case 'patient':
+            window.location.href = 'dashboards/patient-dashboard.html';
+            break;
+          case 'doctor':
+            window.location.href = 'dashboards/doctor-dashboard.html';
+            break;
+          case 'nurse':
+            window.location.href = 'dashboards/nurse-dashboard.html';
+            break;
+          case 'admin':
+            window.location.href = 'dashboards/admin-dashboard.html';
+            break;
+          case 'center-admin':
+            window.location.href = 'dashboards/center-dashboard.html';
+            break;
+          case 'council':
+            window.location.href = 'dashboards/council-dashboard.html';
+            break;
+          case 'attender':
+            window.location.href = 'dashboards/attender-dashboard.html';
+            break;
+          default:
+            window.location.href = 'dashboards/patient-dashboard.html';
+        }
+      } else {
+        errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Login failed. Check your credentials.';
+        errorDiv.classList.add('show');
+        setTimeout(() => errorDiv.classList.remove('show'), 3000);
+      }
+    });
+    
+    // Add demo hint (for testing)
+    console.log('Login Demo: Any email/password works. Role determines dashboard.');
+  </script>
+</body>
+</html>

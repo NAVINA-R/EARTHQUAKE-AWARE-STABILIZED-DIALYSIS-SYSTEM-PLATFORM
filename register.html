@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register - ESDS Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .register-container {
+      background: white;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      width: 100%;
+      max-width: 520px;
+      overflow: hidden;
+      animation: slideUp 0.5s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .register-header {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: white;
+      padding: 40px 32px;
+      text-align: center;
+    }
+
+    .register-header i {
+      font-size: 3.5rem;
+      margin-bottom: 16px;
+    }
+
+    .register-header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .register-header p {
+      opacity: 0.9;
+      font-size: 0.9rem;
+    }
+
+    .register-form {
+      padding: 40px 32px;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #1e2a3e;
+      font-size: 0.9rem;
+    }
+
+    .form-group label i {
+      margin-right: 8px;
+      color: #059669;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 14px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.2s ease;
+      background: #f8fafc;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #059669;
+      background: white;
+      box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.1);
+    }
+
+    .btn-register {
+      width: 100%;
+      padding: 14px;
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      color: white;
+      border: none;
+      border-radius: 16px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      margin-top: 16px;
+    }
+
+    .btn-register:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(5, 150, 105, 0.3);
+    }
+
+    .login-link {
+      text-align: center;
+      margin-top: 24px;
+      padding-top: 24px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .login-link a {
+      color: #059669;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .login-link a:hover {
+      text-decoration: underline;
+    }
+
+    .back-home {
+      text-align: center;
+      margin-top: 16px;
+    }
+
+    .back-home a {
+      color: #64748b;
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+
+    .back-home a:hover {
+      color: #059669;
+    }
+
+    .success-message {
+      background: #d1fae5;
+      border-left: 4px solid #059669;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      color: #065f46;
+      font-size: 0.85rem;
+      display: none;
+      animation: slideDown 0.3s ease;
+    }
+
+    .error-message {
+      background: #fee2e2;
+      border-left: 4px solid #dc2626;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      color: #991b1b;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .success-message.show, .error-message.show {
+      display: block;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .register-header { padding: 30px 24px; }
+      .register-form { padding: 30px 24px; }
+    }
+
+    .terms {
+      font-size: 0.75rem;
+      color: #64748b;
+      text-align: center;
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="register-container">
+    <div class="register-header">
+      <i class="fas fa-user-md"></i>
+      <h1>Create Account</h1>
+      <p>Join ESDS emergency healthcare network</p>
+    </div>
+    <div class="register-form">
+      <div id="successMsg" class="success-message">
+        <i class="fas fa-check-circle"></i> Registration successful! Redirecting to login...
+      </div>
+      <div id="errorMsg" class="error-message">
+        <i class="fas fa-exclamation-triangle"></i> Please fill all fields correctly.
+      </div>
+      <form id="registerForm">
+        <div class="form-group">
+          <label><i class="fas fa-user"></i> Full Name</label>
+          <input type="text" id="fullname" placeholder="Dr. John Doe" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-envelope"></i> Email Address</label>
+          <input type="email" id="email" placeholder="name@example.com" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-phone"></i> Phone Number (Optional)</label>
+          <input type="tel" id="phone" placeholder="+91 98765 43210">
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-lock"></i> Password</label>
+          <input type="password" id="password" placeholder="Min. 6 characters" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-lock"></i> Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="Re-enter password" required>
+        </div>
+        <div class="form-group">
+          <label><i class="fas fa-user-tag"></i> Select Role</label>
+          <select id="role">
+            <option value="patient">👤 Patient</option>
+            <option value="doctor">👨‍⚕️ Doctor</option>
+            <option value="nurse">👩‍⚕️ Nurse</option>
+            <option value="center-admin">🏥 Center Admin</option>
+            <option value="council">🏛️ Council Member</option>
+            <option value="attender">🛠️ Attender / Staff</option>
+          </select>
+        </div>
+        <button type="submit" class="btn-register">
+          <i class="fas fa-user-plus"></i> Register
+        </button>
+      </form>
+      <div class="login-link">
+        Already have an account? <a href="login.html">Sign in here</a>
+      </div>
+      <div class="back-home">
+        <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+      </div>
+      <div class="terms">
+        By registering, you agree to ESDS Terms of Service & Privacy Policy.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      let fullname = document.getElementById('fullname').value.trim();
+      let email = document.getElementById('email').value.trim();
+      let password = document.getElementById('password').value;
+      let confirm = document.getElementById('confirmPassword').value;
+      let role = document.getElementById('role').value;
+      let successDiv = document.getElementById('successMsg');
+      let errorDiv = document.getElementById('errorMsg');
+      
+      // Hide previous messages
+      successDiv.classList.remove('show');
+      errorDiv.classList.remove('show');
+      
+      // Validation
+      if (!fullname || !email || !password) {
+        errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please fill all required fields.';
+        errorDiv.classList.add('show');
+        setTimeout(() => errorDiv.classList.remove('show'), 3000);
+        return;
+      }
+      
+      if (password.length < 6) {
+        errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Password must be at least 6 characters.';
+        errorDiv.classList.add('show');
+        setTimeout(() => errorDiv.classList.remove('show'), 3000);
+        return;
+      }
+      
+      if (password !== confirm) {
+        errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Passwords do not match.';
+        errorDiv.classList.add('show');
+        setTimeout(() => errorDiv.classList.remove('show'), 3000);
+        return;
+      }
+      
+      if (!email.includes('@') || !email.includes('.')) {
+        errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Please enter a valid email address.';
+        errorDiv.classList.add('show');
+        setTimeout(() => errorDiv.classList.remove('show'), 3000);
+        return;
+      }
+      
+      // Simulate successful registration
+      successDiv.innerHTML = '<i class="fas fa-check-circle"></i> Registration successful! Redirecting to login page...';
+      successDiv.classList.add('show');
+      
+      // Store user data in localStorage (demo)
+      let userData = {
+        fullname: fullname,
+        email: email,
+        role: role,
+        registeredAt: new Date().toISOString()
+      };
+      localStorage.setItem('esds_registered_user', JSON.stringify(userData));
+      
+      // Redirect to login after 2 seconds
+      setTimeout(() => {
+        window.location.href = 'login.html';
+      }, 2000);
+    });
+    
+    // Optional: Pre-fill demo data for quick testing
+    console.log('Registration Demo: Fill details and register. After success → redirect to login.html');
+  </script>
+</body>
+</html>

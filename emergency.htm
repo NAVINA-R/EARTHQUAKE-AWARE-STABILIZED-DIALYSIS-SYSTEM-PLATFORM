@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emergency Response - ESDS</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/emergency.css">
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <div id="emergency-banner-container"></div>
+    
+    <div class="container">
+        <div class="card">
+            <h2>🚨 Emergency Response Center</h2>
+            <div class="emergency-controls">
+                <button id="manualEmergencyBtn" class="emergency-btn">🔴 MANUAL EMERGENCY TRIGGER</button>
+                <button id="testAlertBtn" class="btn-outline">📢 Test Alert System</button>
+            </div>
+            
+            <div class="emergency-stats">
+                <div class="emergency-stat">
+                    <div class="stat-number" id="activeResponders">0</div>
+                    <div>Responders Deployed</div>
+                </div>
+                <div class="emergency-stat">
+                    <div class="stat-number" id="evacuatedCount">0</div>
+                    <div>Patients Evacuated</div>
+                </div>
+                <div class="emergency-stat">
+                    <div class="stat-number" id="resourceStatus">Ready</div>
+                    <div>Resource Status</div>
+                </div>
+            </div>
+            
+            <h3>📋 Dispatched Response Teams</h3>
+            <div id="responderList" class="responder-list">
+                <div class="responder-item">⚠️ No active emergency</div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📢 Emergency Broadcast</h2>
+            <div id="emergencyAlerts" class="alert-list"></div>
+        </div>
+    </div>
+    
+    <script src="js/emergency.js"></script>
+    <script src="js/alerts.js"></script>
+</body>
+</html>

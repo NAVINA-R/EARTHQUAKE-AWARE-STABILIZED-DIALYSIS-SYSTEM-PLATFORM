@@ -1,0 +1,13 @@
+@media (max-width: 768px) {
+    .navbar { flex-direction: column; text-align: center; }
+    .nav-links { justify-content: center; }
+    .flex-row { flex-direction: column; }
+    table { font-size: 0.8rem; }
+    .dashboard-grid { grid-template-columns: 1fr; }
+    .emergency-stats { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+    .container { padding: 0 10px; }
+    .card { padding: 1rem; }
+    button { padding: 8px 16px; font-size: 0.9rem; }
+}
