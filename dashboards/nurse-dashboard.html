@@ -206,7 +206,7 @@
 
 <div class="main-content">
   <div class="top-bar">
-    <div><h1><i class="fas fa-user-nurse"></i> Nurse Maria Lopez</h1><span>Dialysis Unit · Shift: Morning (7am - 3pm)</span></div>
+    <div><h1><i class="fas fa-user-nurse"></i> Nurse Maria </h1><span>Dialysis Unit · Shift: Morning (7am - 3pm)</span></div>
     <div class="nurse-badge"><i class="fas fa-check-circle"></i> On Duty · 12 sessions today</div>
   </div>
 
@@ -265,15 +265,15 @@
 <script>
   // Mock Data
   let patients = [
-    { id: "P001", name: "John Smith", age: 58, vitals: { spo2: 96, hr: 78, bp: "130/85", temp: 36.6 }, sessionStatus: "In Progress", machineAssigned: "A-01" },
-    { id: "P002", name: "Mary Johnson", age: 62, vitals: { spo2: 94, hr: 82, bp: "145/90", temp: 37.0 }, sessionStatus: "Waiting", machineAssigned: "A-02" },
-    { id: "P003", name: "Robert Lee", age: 45, vitals: { spo2: 98, hr: 68, bp: "118/76", temp: 36.4 }, sessionStatus: "Completed", machineAssigned: "B-03" },
-    { id: "P004", name: "Emma Watson", age: 51, vitals: { spo2: 92, hr: 88, bp: "150/92", temp: 37.2 }, sessionStatus: "In Progress", machineAssigned: "A-03" }
+    { id: "P001", name: "John", age: 58, vitals: { spo2: 96, hr: 78, bp: "130/85", temp: 36.6 }, sessionStatus: "In Progress", machineAssigned: "A-01" },
+    { id: "P002", name: "Ramya", age: 62, vitals: { spo2: 94, hr: 82, bp: "145/90", temp: 37.0 }, sessionStatus: "Waiting", machineAssigned: "A-02" },
+    { id: "P003", name: "Lavanya", age: 45, vitals: { spo2: 98, hr: 68, bp: "118/76", temp: 36.4 }, sessionStatus: "Completed", machineAssigned: "B-03" },
+    { id: "P004", name: "Sita", age: 51, vitals: { spo2: 92, hr: 88, bp: "150/92", temp: 37.2 }, sessionStatus: "In Progress", machineAssigned: "A-03" }
   ];
 
   let activeSessions = [
-    { patientId: "P001", patientName: "John Smith", startTime: "08:30 AM", machine: "A-01", status: "running", checklistCompleted: false },
-    { patientId: "P004", patientName: "Emma Watson", startTime: "09:00 AM", machine: "A-03", status: "running", checklistCompleted: false }
+    { patientId: "P001", patientName: "Rohit", startTime: "08:30 AM", machine: "A-01", status: "running", checklistCompleted: false },
+    { patientId: "P004", patientName: "Suman", startTime: "09:00 AM", machine: "A-03", status: "running", checklistCompleted: false }
   ];
 
   let machineParameters = [
