@@ -192,7 +192,7 @@
 
 <div class="main-content">
   <div class="top-bar">
-    <div><h1><i class="fas fa-heartbeat"></i> Dr. Sarah Chen</h1><span>Cardiology & Emergency Medicine · Clinical Oversight</span></div>
+    <div><h1><i class="fas fa-heartbeat"></i> Dr. Saranya </h1><span> Nephrology & Emergency Medicine · Clinical Oversight</span></div>
     <div class="doctor-badge"><i class="fas fa-stethoscope"></i> On Duty</div>
   </div>
 
@@ -242,15 +242,15 @@
 <script>
   // ---------- MOCK DATA ----------
   let patients = [
-    { id: "P001", name: "John Smith", age: 58, triageScore: 85, dialysisSchedule: "Mon/Wed/Fri", vitals: "BP: 130/85, HR: 78", medicalRecord: "History: Hypertension. Previous surgery: none", treatmentPlan: "Lisinopril 10mg daily, Diet control" },
-    { id: "P002", name: "Mary Johnson", age: 62, triageScore: 92, dialysisSchedule: "Tue/Thu/Sat", vitals: "BP: 145/90, HR: 82", medicalRecord: "Diabetes Type 2, CKD Stage 4", treatmentPlan: "Insulin + EPO" },
-    { id: "P003", name: "Robert Lee", age: 45, triageScore: 45, dialysisSchedule: "Mon/Wed", vitals: "BP: 118/76, HR: 68", medicalRecord: "Post-accident recovery", treatmentPlan: "Physical therapy" }
+    { id: "P001", name: "Ram", age: 58, triageScore: 85, dialysisSchedule: "Mon/Wed/Fri", vitals: "BP: 130/85, HR: 78", medicalRecord: "History: Hypertension. Previous surgery: none", treatmentPlan: "Lisinopril 10mg daily, Diet control" },
+    { id: "P002", name: "Lavanya", age: 62, triageScore: 92, dialysisSchedule: "Tue/Thu/Sat", vitals: "BP: 145/90, HR: 82", medicalRecord: "Diabetes Type 2, CKD Stage 4", treatmentPlan: "Insulin + EPO" },
+    { id: "P003", name: "Sita", age: 45, triageScore: 45, dialysisSchedule: "Mon/Wed", vitals: "BP: 118/76, HR: 68", medicalRecord: "Post-accident recovery", treatmentPlan: "Physical therapy" }
   ];
 
   let appointments = [
-    { patient: "John Smith", date: "2025-05-08 10:30 AM", type: "Follow-up" },
-    { patient: "Mary Johnson", date: "2025-05-08 02:00 PM", type: "Dialysis Review" },
-    { patient: "Robert Lee", date: "2025-05-09 11:00 AM", type: "Consultation" }
+    { patient: "Ram", date: "2025-05-08 10:30 AM", type: "Follow-up" },
+    { patient: "Sita", date: "2025-05-08 02:00 PM", type: "Dialysis Review" },
+    { patient: "Lavanya", date: "2025-05-09 11:00 AM", type: "Consultation" }
   ];
 
   let labResults = [
@@ -265,12 +265,12 @@
 
   let sessionNotes = [
     "2025-05-07: Discussed diet modifications with John Smith",
-    "2025-05-06: Mary Johnson's vitals stable, adjusted EPO dosage"
+    "2025-05-06: Lavanya's vitals stable, adjusted EPO dosage"
   ];
 
   let criticalAlerts = [
-    { patient: "Mary Johnson", alert: "BP elevated: 165/95 - Needs immediate review" },
-    { patient: "John Smith", alert: "Chest pain reported - Triage score increased" }
+    { patient: "Ram", alert: "BP elevated: 165/95 - Needs immediate review" },
+    { patient: "Sita", alert: "Chest pain reported - Triage score increased" }
   ];
 
   function updateStats() {
