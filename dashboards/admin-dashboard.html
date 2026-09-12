@@ -340,14 +340,14 @@ Here is the complete admin dashboard HTML/CSS code with all the requested featur
 <script>
   // ---------- SUPER ADMIN MOCK DATA ----------
   let users = [
-    { id: 1, name: "Dr. Sarah Chen", role: "doctor", email: "sarah.chen@esds.com", status: "active" },
-    { id: 2, name: "John Smith", role: "patient", email: "john.smith@email.com", status: "active" },
-    { id: 3, name: "Nurse Emma Wilson", role: "nurse", email: "emma.w@esds.com", status: "active" },
+    { id: 1, name: "Dr. Saranya", role: "doctor", email: "sarah.chen@esds.com", status: "active" },
+    { id: 2, name: "Joshi", role: "patient", email: "josh@email.com", status: "active" },
+    { id: 3, name: "Nurse Vincent", role: "nurse", email: "vincy@esds.com", status: "active" },
     { id: 4, name: "City Dialysis Center", role: "center-admin", email: "admin@citydialysis.com", status: "active" },
     { id: 5, name: "Regional Council Office", role: "council", email: "council@region.gov", status: "suspended" },
     { id: 6, name: "David Attender", role: "attender", email: "david.att@esds.com", status: "active" },
-    { id: 7, name: "Dr. Michael Lee", role: "doctor", email: "michael.lee@cardio.com", status: "active" },
-    { id: 8, name: "Maria Garcia", role: "patient", email: "maria.garcia@email.com", status: "active" }
+    { id: 7, name: "Dr. Michael", role: "doctor", email: "michael.lee@cardio.com", status: "active" },
+    { id: 8, name: "Maria", role: "patient", email: "maria.garcia@email.com", status: "active" }
   ];
 
   let dialysisCenters = [
@@ -357,7 +357,7 @@ Here is the complete admin dashboard HTML/CSS code with all the requested featur
 
   let auditLogs = [
     { time: "2025-05-07 08:23:12", action: "Admin override emergency mode", user: "superadmin" },
-    { time: "2025-05-07 07:15:44", action: "User Dr. Sarah Chen approved", user: "superadmin" },
+    { time: "2025-05-07 07:15:44", action: "User Dr. Saranya approved", user: "superadmin" },
     { time: "2025-05-06 22:10:03", action: "Security alert: multiple failed logins", user: "system" }
   ];
 
@@ -374,7 +374,7 @@ Here is the complete admin dashboard HTML/CSS code with all the requested featur
   ];
 
   let activeSessions = [
-    { user: "Dr. Sarah Chen", role: "doctor", lastActive: "2 min ago" },
+    { user: "Dr. Saranya", role: "doctor", lastActive: "2 min ago" },
     { user: "Admin Root", role: "superadmin", lastActive: "Now" },
     { user: "City Dialysis Center", role: "center-admin", lastActive: "5 min ago" }
   ];
@@ -467,7 +467,7 @@ Here is the complete admin dashboard HTML/CSS code with all the requested featur
     if(newName) {
       let newId = Date.now();
       dialysisCenters.push({ id: newId, name: newName, location: "New Region", capacity: 10, activeMachines: 5 });
-      renderCenters();
+      renderCenters(); 
       addAuditLog(`Added new dialysis center: ${newName}`);
     }
   });
